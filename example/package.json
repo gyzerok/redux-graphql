@@ -5,7 +5,8 @@
   "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "build": "webpack",
+    "start": "node index.js"
   },
   "author": "",
   "license": "ISC",
@@ -13,10 +14,10 @@
     "body-parser": "^1.13.3",
     "express": "^4.13.3",
     "express-graphql": "^0.3.0",
-    "graphql": "^0.4.2",
+    "history": "^1.9.0",
     "multer": "^1.0.3",
     "react-redux": "^0.8.2",
-    "react-router": "^1.0.0-beta3",
+    "react-router": "^1.0.0-rc1",
     "redux": "^1.0.0-rc",
     "redux-thunk": "^0.1.0",
     "whatwg-fetch": "^0.9.0"
