@@ -20,7 +20,7 @@
     "flux"
   ],
   "peerDependencies": {
-    "react": "^0.13.3",
+    "react": "^0.13.3 || ^0.14.0-rc1",
     "graphql": "^0.4.3",
     "redux": "^2.0.0"
   },
