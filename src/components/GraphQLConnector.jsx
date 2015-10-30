@@ -8,6 +8,7 @@ import { graphql } from 'graphql';
 export default class GraphQLConnector extends Component {
   static contextTypes = {
     store: createStoreShape(PropTypes).isRequired,
+    storeKey: PropTypes.string,
     schema: PropTypes.object.isRequired,
   }
 
@@ -69,10 +70,9 @@ export default class GraphQLConnector extends Component {
   }
 
   selectState(props, context) {
-    const state = context.store.getState();
-
-    const { schema } = this.context;
+    const { schema, store, storeKey } = this.context;
     const { query, variables } = props;
+    const state = storeKey ? store.getState()[storeKey] : store.getState();
 
     return graphql(schema, query, state, variables)
       .then(({ data: slice }) => ({ slice }));
