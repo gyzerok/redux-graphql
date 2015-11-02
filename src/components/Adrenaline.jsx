@@ -13,6 +13,7 @@ import { UPDATE_CACHE } from '../constants';
 export default class Adrenaline extends Component {
   static childContextTypes = {
     store: createStoreShape(PropTypes).isRequired,
+    storeKey: PropTypes.string,
     Loading: PropTypes.func.isRequired,
     schema: PropTypes.object.isRequired,
     performQuery: PropTypes.func.isRequired,
@@ -34,6 +35,7 @@ export default class Adrenaline extends Component {
   getChildContext() {
     return {
       store: this.store,
+      storeKey: this.props.storeKey,
       Loading: this.props.renderLoading,
       schema: this.props.schema,
       performQuery: this.performQuery.bind(this),
@@ -71,7 +73,7 @@ export default class Adrenaline extends Component {
       'You have to declare "mutation" field in your mutation'
     );
 
-    const { endpoint } = this.props;
+    const { endpoint, storeKey } = this.props;
     const { parsedSchema, store } = this;
     const { dispatch } = store;
 
@@ -82,7 +84,7 @@ export default class Adrenaline extends Component {
 
         updateCache.forEach((fn) => {
           const { parentId, parentType, resolve } = fn(Object.values(json.data)[0]);
-          const state = store.getState();
+          const state = storeKey ? store.getState()[storeKey] : store.getState();
           const parent = state[parentType][parentId];
           if (!parent) return;
           dispatch({

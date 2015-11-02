@@ -238,6 +238,7 @@ Root of your application should be wrapped with Adrenaline component.
   - `endpoint`: URL to your GraphQL endpoint.
   - `schema`: An instance of GraphQL schema you are using.
   - `createStore`: Function for creating a store. Reducers would be created automatically, you just need to provide this function in order to be able to configure it with custom middlewares and higher-order stores. If nothing is provided `Redux.createStore` will be used.
+  - `storeKey`: String to specify the object on your store in which the Adrenaline state is stored.
 
 ### `createDumbComponent(Component, { fragments })`
 
