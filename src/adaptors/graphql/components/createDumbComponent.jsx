@@ -40,7 +40,10 @@ export default function createDumbComponent(DecoratedComponent, specs) {
         key
       );
 
-      return '... on ' + fragments[key].replace(/\s+/g, ' ').trim();
+      return fragments[key]
+        .replace(/\s+/g, ' ')
+        .replace('fragment', '...')
+        .trim();
     }
 
     render() {

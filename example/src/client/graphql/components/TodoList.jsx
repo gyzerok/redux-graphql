@@ -33,7 +33,7 @@ class TodoList extends Component {
 export default createDumbComponent(TodoList, {
   fragments: {
     todos: `
-      User {
+      fragment on User {
         todos {
           id,
           ${TodoItem.getFragment('todo')}
