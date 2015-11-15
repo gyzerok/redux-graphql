@@ -16,13 +16,13 @@ class TodoList extends Component {
   }
 
   render() {
-    const { createTodo } = this.props.mutations;
+    //const { createTodo } = this.props.mutations;
     return (
       <div>
-        <TodoInput createTodo={createTodo} />
+        {/*<TodoInput createTodo={createTodo} />*/}
         <ul>
           {this.props.todos.map(todo =>
-            <TodoItem todo={todo} />
+            <TodoItem key={todo.id} todo={todo} />
           )}
         </ul>
       </div>
@@ -34,7 +34,7 @@ export default createDumbComponent(TodoList, {
   fragments: {
     todos: `
       User {
-        todos(count: $count) {
+        todos {
           id,
           ${TodoItem.getFragment('todo')}
         }

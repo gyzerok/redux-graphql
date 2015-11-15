@@ -1,4 +1,0 @@
-/* @flow */
-
-export const UPDATE_CACHE = 'ADRENALINE_UPDATE_CACHE';
-export const UPDATE_CACHE_BY_ID = 'ADRENALINE_UPDATE_CACHE_BY_ID';

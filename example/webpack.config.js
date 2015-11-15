@@ -4,8 +4,8 @@ var webpack = require('webpack');
 module.exports = {
   devtool: 'eval-source-map',
   entry: {
-    graphql: path.join(__dirname, 'src', 'client', 'graphql'),
-    rest: path.join(__dirname, 'src', 'client', 'rest')
+    graphql: path.join(__dirname, 'src', 'client', 'graphql')/*,
+    rest: path.join(__dirname, 'src', 'client', 'rest')*/
   },
   output: {
     path: path.join(__dirname, '.tmp'),

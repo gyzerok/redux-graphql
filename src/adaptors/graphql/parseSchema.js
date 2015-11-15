@@ -1,5 +1,3 @@
-/* @flow */
-
 import { reduce } from 'lodash';
 import {
   GraphQLList,

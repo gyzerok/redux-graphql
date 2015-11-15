@@ -1,5 +1,3 @@
-/* @flow */
-
 import { isArray, isEqual } from 'lodash';
 
 export default function normalize(parsedSchema, data) {

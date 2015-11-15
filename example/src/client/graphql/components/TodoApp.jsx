@@ -1,20 +1,13 @@
 /* @flow */
 
-import React, { Component, PropTypes, findDOMNode } from 'react';
+import React, { Component, PropTypes } from 'react';
 import TodoList from './TodoList';
 import * as todoMutations from '../mutations/todo';
-import { createSmartComponent } from '../../../../../src';
+import { createContainer } from '../../../../../src';
 
 class TodoApp extends Component {
   static propTypes = {
     viewer: PropTypes.object.isRequired,
-    mutations: PropTypes.object.isRequired,
-  }
-
-  componentDidMount() {
-    setTimeout(() => {
-      this.setVariables({ count: 10 });
-    }, 2000);
   }
 
   render() {
@@ -26,19 +19,19 @@ class TodoApp extends Component {
   }
 }
 
-export default createSmartComponent(TodoApp, {
-  initialVariables: {
+export default createContainer(TodoApp, {
+  args: () => ({
     count: 2,
-  },
-  query: `
-    query TodoApp($count: Int) {
+  }),
+  queries: ({ count }) => ({
+    viewer: `
       viewer {
         id,
         ${TodoList.getFragment('todos')}
       }
-    }
-  `,
-  mutations: {
+    `,
+  }),
+  /*mutations: {
     ...todoMutations,
-  },
+  },*/
 });

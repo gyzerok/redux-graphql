@@ -1,5 +1,3 @@
-/* @flow */
-
 export default function merge(objA, objB) {
   const dst = { ...objA };
   for (const key in objB) {
