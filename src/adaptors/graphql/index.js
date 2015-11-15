@@ -1,9 +1,9 @@
 import { createStore, combineReducers } from 'redux';
 import { graphql } from 'graphql';
 
-import parseSchema from './parseSchema';
-import normalize from './normalize';
-import merge from './merge';
+import parseSchema from './utils/parseSchema';
+import normalize from './utils/normalize';
+import merge from './utils/merge';
 
 const UPDATE_CACHE = 'UPDATE_CACHE';
 
