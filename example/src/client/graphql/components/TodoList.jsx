@@ -7,7 +7,7 @@ import { createDumbComponent } from '../../../../../src';
 
 class TodoList extends Component {
   static propTypes = {
-    mutations: PropTypes.object.isRequired,
+    //mutations: PropTypes.object.isRequired,
     todos: PropTypes.array,
   }
 

@@ -7,7 +7,7 @@ import merge from './merge';
 
 const UPDATE_CACHE = 'UPDATE_CACHE';
 
-export default function createGraphQLAdaptor(endpoint, schema) {
+export default function createAdaptor(endpoint, schema) {
   const parsedSchema = parseSchema(schema);
   const reducers = Object.keys(parsedSchema).reduce((acc, key) => {
     return {
@@ -25,7 +25,7 @@ export default function createGraphQLAdaptor(endpoint, schema) {
         return `${acc} ${specs[key]}`;
       }, '');
       const graphQLQuery = `
-        query Q {
+        query AdrenalineQuery {
           ${query}
         }
       `.replace(/\s+/g, ' ').trim();
