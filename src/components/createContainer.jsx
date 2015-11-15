@@ -9,7 +9,7 @@ import createAdaptorShape from '../utils/createAdaptorShape';
 const adaptorShape = createAdaptorShape(PropTypes);
 
 export default function createContainer(DecoratedComponent, specs) {
-  const displayName = `SmartComponent(${getDisplayName(DecoratedComponent)})`;
+  const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
 
   invariant(
     specs !== null && specs !== undefined,
