@@ -46,7 +46,8 @@ export default class AdrenalineConnector extends Component {
 
   hasSliceChanged(props, slice, nextSlice) {
     const { adrenaline} = props;
-    return adrenaline.hasStateChanged((slice||{}).props, (nextSlice||{}).props);
+    return !shallowEqual((slice || {}).variables, (nextSlice || {}).variables) ||
+        adrenaline.hasStateChanged((slice||{}).props, (nextSlice||{}).props);
   }
 
   handleChange(props = this.props) {
