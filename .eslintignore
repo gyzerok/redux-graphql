@@ -1,6 +1,4 @@
 node_modules
-src/**/__tests__/*
 lib
 example/webpack.*.js
 example/index.js
-webpack.config.js

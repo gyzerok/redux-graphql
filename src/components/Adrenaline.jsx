@@ -2,7 +2,6 @@
 
 import React, { Component, PropTypes, Children } from 'react';
 
-import Loading from './Loading';
 import createAdaptorShape from '../utils/createAdaptorShape';
 
 const adaptorShape = createAdaptorShape(PropTypes);
@@ -15,7 +14,7 @@ export default class Adrenaline extends Component {
 
   static propTypes = {
     renderLoading: PropTypes.func,
-    children: PropTypes.func.isRequired,
+    children: PropTypes.element.isRequired,
   }
 
   static defaultProps = {
@@ -31,7 +30,7 @@ export default class Adrenaline extends Component {
 
   render() {
     const { children } = this.props;
-    return children();
+    return children;
   }
 }
 
