@@ -39,6 +39,8 @@ export default function createContainer(DecoratedComponent, specs) {
     constructor(props, context) {
       super(props, context);
 
+      this.isNotMounted = true;
+
       const { adaptor } = context;
       //DecoratedComponent.prototype.shouldComponentUpdate = adaptor.shouldComponentUpdate;
 
@@ -62,12 +64,13 @@ export default function createContainer(DecoratedComponent, specs) {
 
     componentDidMount() {
       const { adaptor } = this.context;
-      this.unsubscribe = adaptor.subscribe(this.resolve);
+      this.isNotMounted= false;
+      this.unsubscribe = noop;
       this.resolve();
     }
 
     componentWillUnmount() {
-      this.isUnmounted = true;
+      this.isNotMounted = true;
       this.unsubscribe();
     }
 
@@ -86,7 +89,7 @@ export default function createContainer(DecoratedComponent, specs) {
       this.unsubscribe(); // fix double resolve
       adaptor.resolve(queries, args, this.isDataLoaded)
         .then(data => {
-          if (this.isUnmounted) {
+          if (this.isNotMounted) {
             return cb();
           }
 
