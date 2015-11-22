@@ -14,7 +14,7 @@ class TodoApp extends Component {
 
   createTodo = (args) => {
     const { adaptor } = this.props;
-    adaptor.mutate(createTodo, args);
+    adaptor.mutate(createTodo, { input: args });
   }
 
   render() {

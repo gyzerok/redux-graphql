@@ -120,14 +120,14 @@ function performMutation(endpoint, mutation, variables, files) {
       },
       body: JSON.stringify({
         query: mutation,
-        variables: { input: variables },
+        variables,
       }),
     }).then(res => res.json());
   }
 
   const formData = new FormData();
   formData.append('query', mutation);
-  formData.append('variables', JSON.stringify({ input: variables }));
+  formData.append('variables', JSON.stringify(variables));
   if (files) {
     for (const filename in files) {
       if (files.hasOwnProperty(filename)) {
