@@ -47,8 +47,8 @@ export default function createAdaptor(endpoint, schema) {
         });
     },
 
-    mutate(mutationSpec, variables, files) {
-      const { mutation, updateCache } = mutationSpec;
+    mutate(specs, variables, files) {
+      const { mutation, updateCache } = specs;
 
       return performMutation(endpoint, mutation, variables, files)
         .then(res => {
