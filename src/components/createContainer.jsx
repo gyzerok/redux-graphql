@@ -7,6 +7,7 @@ import getDisplayName from '../utils/getDisplayName';
 import createAdaptorShape from '../utils/createAdaptorShape';
 
 const adaptorShape = createAdaptorShape(PropTypes);
+function noop() {}
 
 export default function createContainer(DecoratedComponent, specs) {
   const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
@@ -66,6 +67,7 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     componentWillUnmount() {
+      this.isUnmounted = true;
       this.unsubscribe();
     }
 
@@ -73,7 +75,7 @@ export default function createContainer(DecoratedComponent, specs) {
       this.resolve(nextArgs, cb);
     }
 
-    resolve = (nextArgs = {}, cb) => {
+    resolve = (nextArgs = {}, cb = noop) => {
       const { adaptor } = this.context;
       const { queries } = specs;
       const args = {
@@ -84,6 +86,10 @@ export default function createContainer(DecoratedComponent, specs) {
       this.unsubscribe(); // fix double resolve
       adaptor.resolve(queries, args, this.isDataLoaded)
         .then(data => {
+          if (this.isUnmounted) {
+            return cb();
+          }
+
           this.unsubscribe = adaptor.subscribe(this.resolve); // fix double resolve
           this.setState({
             data: {
