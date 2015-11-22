@@ -22,7 +22,7 @@ export default function createContainer(DecoratedComponent, specs) {
   );
 
   invariant(
-    !!specs.args && typeof specs.args === 'function',
+    !specs.args || typeof specs.args === 'function',
     `You have to define 'args' as a function in ${displayName}.`
   );
 
