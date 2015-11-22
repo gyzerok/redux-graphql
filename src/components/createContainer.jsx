@@ -15,9 +15,15 @@ export default function createContainer(DecoratedComponent, specs) {
     specs !== null && specs !== undefined,
     `${displayName} requires configuration.`
   );
+
   invariant(
     typeof specs.queries === 'function',
-    `You have to define 'queries' as a function.`
+    `You have to define 'queries' as a function in${displayName}.`
+  );
+
+  invariant(
+    !!specs.args && typeof specs.args === 'function',
+    `You have to define 'args' as a function in ${displayName}.`
   );
 
   return class extends Component {
@@ -35,11 +41,11 @@ export default function createContainer(DecoratedComponent, specs) {
       const { adaptor } = context;
       //DecoratedComponent.prototype.shouldComponentUpdate = adaptor.shouldComponentUpdate;
 
-      const initialArgs = specs.args(props);
+      const initialArgs = !!specs.args ? specs.args(props) : {};
 
       this.state = {
         data: {},
-        args: specs.args(props),
+        args: initialArgs,
       };
 
       const dataKeys = Object.keys(specs.queries(initialArgs));
