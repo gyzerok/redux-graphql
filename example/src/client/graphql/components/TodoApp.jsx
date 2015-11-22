@@ -1,20 +1,30 @@
 /* @flow */
 
 import React, { Component, PropTypes } from 'react';
-import TodoList from './TodoList';
-import * as todoMutations from '../mutations/todo';
 import { createContainer } from '../../../../../src';
+
+import TodoInput from './TodoInput';
+import TodoList from './TodoList';
+import { createTodo } from '../mutations/todo';
 
 class TodoApp extends Component {
   static propTypes = {
     viewer: PropTypes.object.isRequired,
   }
 
+  createTodo = (args) => {
+    const { adaptor } = this.props;
+    adaptor.mutate(createTodo, args);
+  }
+
   render() {
     const { viewer, mutations } = this.props;
 
     return (
-      <TodoList todos={viewer.todos} mutations={mutations} />
+      <div>
+        <TodoInput createTodo={this.createTodo} />
+        <TodoList todos={viewer.todos} mutations={mutations} />
+      </div>
     );
   }
 }
@@ -31,7 +41,4 @@ export default createContainer(TodoApp, {
       }
     `,
   }),
-  mutations: {
-    ...todoMutations,
-  },
 });

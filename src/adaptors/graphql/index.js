@@ -20,21 +20,6 @@ export default function createAdaptor(endpoint, schema) {
 
   return {
     resolve(queries, args, isDataLoaded) {
-      // FIXME: better handle mutation case
-      if (typeof isDataLoaded !== 'function') {
-        const mutation = queries;
-        const files = isDataLoaded;
-        return request(endpoint, mutation, args, files)
-          .then(res => {
-            store.dispatch({
-              type: UPDATE_CACHE,
-              payload: normalize(parsedSchema, res.data),
-            });
-
-            return Promise.resolve();
-          });
-      }
-
       const specs = queries(args);
       const query = Object.keys(specs).reduce((acc, key) => {
         return `${acc} ${specs[key]}`;
@@ -51,7 +36,7 @@ export default function createAdaptor(endpoint, schema) {
             return res.data;
           }
 
-          return request(endpoint, graphQLQuery).then(res => {
+          return performQuery(endpoint, graphQLQuery).then(res => {
             store.dispatch({
               type: UPDATE_CACHE,
               payload: normalize(parsedSchema, res.data),
@@ -59,6 +44,37 @@ export default function createAdaptor(endpoint, schema) {
 
             return Promise.resolve();
           });
+        });
+    },
+
+    mutate(mutationSpec, variables, files) {
+      const { mutation, updateCache } = mutationSpec;
+
+      return performMutation(endpoint, mutation, variables, files)
+        .then(res => {
+          store.dispatch({
+            type: UPDATE_CACHE,
+            payload: normalize(parsedSchema, res.data),
+          });
+
+          updateCache.forEach((fn) => {
+            const { parentId, parentType, resolve } = fn(Object.values(res.data)[0]);
+            const state = store.getState();
+            const parent = state[parentType][parentId];
+
+            if (!parent) return;
+
+            store.dispatch({
+              type: UPDATE_CACHE,
+              payload: {
+                [parentType]: {
+                  [parent.id]: resolve(parent),
+                },
+              },
+            });
+          });
+
+          return Promise.resolve();
         });
     },
 
@@ -83,14 +99,6 @@ function createReducer(key) {
   };
 }
 
-function request(...args) {
-  if (args.length > 2) {
-    return performMutation(...args);
-  }
-
-  return performQuery(...args);
-}
-
 function performQuery(endpoint, query) {
   return fetch(endpoint, {
     method: 'post',
@@ -111,14 +119,14 @@ function performMutation(endpoint, mutation, variables, files) {
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        query: mutation.mutation,
+        query: mutation,
         variables: { input: variables },
       }),
     }).then(res => res.json());
   }
 
   const formData = new FormData();
-  formData.append('query', mutation.mutation);
+  formData.append('query', mutation);
   formData.append('variables', JSON.stringify({ input: variables }));
   if (files) {
     for (const filename in files) {

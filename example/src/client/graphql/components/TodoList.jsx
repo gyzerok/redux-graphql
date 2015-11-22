@@ -1,13 +1,12 @@
 /* @flow */
 
 import React, { Component, PropTypes } from 'react';
-import TodoInput from './TodoInput';
-import TodoItem from './TodoItem';
 import { createDumbComponent } from '../../../../../src';
+
+import TodoItem from './TodoItem';
 
 class TodoList extends Component {
   static propTypes = {
-    mutations: PropTypes.object.isRequired,
     todos: PropTypes.array,
   }
 
@@ -16,16 +15,12 @@ class TodoList extends Component {
   }
 
   render() {
-    const { createTodo } = this.props.mutations;
     return (
-      <div>
-        <TodoInput createTodo={createTodo} />
-        <ul>
-          {this.props.todos.map(todo =>
-            <TodoItem key={todo.id} todo={todo} />
-          )}
-        </ul>
-      </div>
+      <ul>
+        {this.props.todos.map(todo =>
+          <TodoItem key={todo.id} todo={todo} />
+        )}
+      </ul>
     );
   }
 }

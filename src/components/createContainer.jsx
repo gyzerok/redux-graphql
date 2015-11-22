@@ -92,13 +92,6 @@ export default function createContainer(DecoratedComponent, specs) {
       const { adaptor, renderLoading } = this.context;
       const { data, args } = this.state;
 
-      const mutations = Object.keys(specs.mutations).reduce((acc, key) => {
-        return {
-          ...acc,
-          [key]: (args, files) => adaptor.resolve(specs.mutations[key], args, files),
-        };
-      }, {});
-
       if (!this.isDataLoaded(data)) {
         return renderLoading();
       }
@@ -107,7 +100,7 @@ export default function createContainer(DecoratedComponent, specs) {
         <DecoratedComponent
           {...this.props}
           {...data}
-          mutations={mutations}
+          adaptor={adaptor}
           args={args}
           setArgs={this.setArgs} />
       );
