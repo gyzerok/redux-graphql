@@ -55,8 +55,8 @@ export default function createContainer(DecoratedComponent, specs) {
 
     componentDidMount() {
       const { adaptor } = this.context;
-      this.unsubscribe = adaptor.subscribe(this.fetch);
-      this.fetch();
+      this.unsubscribe = adaptor.subscribe(this.resolve);
+      this.resolve();
     }
 
     componentWillUnmount() {
@@ -64,10 +64,10 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     setArgs = (nextArgs, cb) => {
-      this.fetch(nextArgs, cb);
+      this.resolve(nextArgs, cb);
     }
 
-    fetch = (nextArgs = {}, cb) => {
+    resolve = (nextArgs = {}, cb) => {
       const { adaptor } = this.context;
       const { queries } = specs;
       const args = {
@@ -89,8 +89,15 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     render() {
-      const { renderLoading } = this.context;
+      const { adaptor, renderLoading } = this.context;
       const { data, args } = this.state;
+
+      const mutations = Object.keys(specs.mutations).reduce((acc, key) => {
+        return {
+          ...acc,
+          [key]: (args, files) => adaptor.resolve(specs.mutations[key], args, files),
+        };
+      }, {});
 
       if (!this.isDataLoaded(data)) {
         return renderLoading();
@@ -100,6 +107,7 @@ export default function createContainer(DecoratedComponent, specs) {
         <DecoratedComponent
           {...this.props}
           {...data}
+          mutations={mutations}
           args={args}
           setArgs={this.setArgs} />
       );

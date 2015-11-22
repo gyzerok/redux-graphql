@@ -31,7 +31,7 @@ export default createContainer(TodoApp, {
       }
     `,
   }),
-  /*mutations: {
+  mutations: {
     ...todoMutations,
-  },*/
+  },
 });

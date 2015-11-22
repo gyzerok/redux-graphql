@@ -2,8 +2,8 @@
 
 export const createTodo = {
   mutation: `
-    mutation AppMutation($text: String) {
-      createTodo(text: $text) {
+    mutation AppMutation($input: TodoInput) {
+      createTodo(input: $input) {
         id,
         text,
         createdAt,

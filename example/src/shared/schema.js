@@ -8,6 +8,7 @@ import {
   GraphQLList,
   GraphQLNonNull,
   GraphQLEnumType,
+  GraphQLInputObjectType,
   GraphQLSchema,
 } from 'graphql';
 
@@ -79,6 +80,13 @@ const enumType = new GraphQLEnumType({
   },
 });
 
+const todoInput = new GraphQLInputObjectType({
+  name: 'TodoInput',
+  fields: () => ({
+    text: { type: GraphQLString },
+  }),
+});
+
 export default new GraphQLSchema({
   query: new GraphQLObjectType({
     name: 'Query',
@@ -104,13 +112,12 @@ export default new GraphQLSchema({
       createTodo: {
         type: todoType,
         args: {
-          text: {
-            name: 'text',
-            type: GraphQLString,
+          input: {
+            type: todoInput,
           },
         },
-        resolve: (root, params) => {
-          return root.createTodo(params);
+        resolve: (root, { input }) => {
+          return root.createTodo(input);
         },
       },
     }),

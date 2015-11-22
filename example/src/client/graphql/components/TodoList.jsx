@@ -7,7 +7,7 @@ import { createDumbComponent } from '../../../../../src';
 
 class TodoList extends Component {
   static propTypes = {
-    //mutations: PropTypes.object.isRequired,
+    mutations: PropTypes.object.isRequired,
     todos: PropTypes.array,
   }
 
@@ -16,10 +16,10 @@ class TodoList extends Component {
   }
 
   render() {
-    //const { createTodo } = this.props.mutations;
+    const { createTodo } = this.props.mutations;
     return (
       <div>
-        {/*<TodoInput createTodo={createTodo} />*/}
+        <TodoInput createTodo={createTodo} />
         <ul>
           {this.props.todos.map(todo =>
             <TodoItem key={todo.id} todo={todo} />

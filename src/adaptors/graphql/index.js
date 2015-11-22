@@ -20,6 +20,21 @@ export default function createAdaptor(endpoint, schema) {
 
   return {
     resolve(queries, args, isDataLoaded) {
+      // FIXME: better handle mutation case
+      if (typeof isDataLoaded !== 'function') {
+        const mutation = queries;
+        const files = isDataLoaded;
+        return request(endpoint, mutation, args, files)
+          .then(res => {
+            store.dispatch({
+              type: UPDATE_CACHE,
+              payload: normalize(parsedSchema, res.data),
+            });
+
+            return Promise.resolve();
+          });
+      }
+
       const specs = queries(args);
       const query = Object.keys(specs).reduce((acc, key) => {
         return `${acc} ${specs[key]}`;
@@ -68,7 +83,26 @@ function createReducer(key) {
   };
 }
 
-function request(endpoint, query, variables, files) {
+function request(...args) {
+  if (args.length > 2) {
+    return performMutation(...args);
+  }
+
+  return performQuery(...args);
+}
+
+function performQuery(endpoint, query) {
+  return fetch(endpoint, {
+    method: 'post',
+    headers: {
+      'Accept': 'application/json',
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ query }),
+  }).then(res => res.json());
+}
+
+function performMutation(endpoint, mutation, variables, files) {
   if (!files) {
     return fetch(endpoint, {
       method: 'post',
@@ -76,7 +110,25 @@ function request(endpoint, query, variables, files) {
         'Accept': 'application/json',
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify({ query }),
+      body: JSON.stringify({
+        query: mutation.mutation,
+        variables: { input: variables },
+      }),
     }).then(res => res.json());
   }
+
+  const formData = new FormData();
+  formData.append('query', mutation.mutation);
+  formData.append('variables', JSON.stringify({ input: variables }));
+  if (files) {
+    for (const filename in files) {
+      if (files.hasOwnProperty(filename)) {
+        formData.append(filename, files[filename]);
+      }
+    }
+  }
+  return fetch(endpoint, {
+    method: 'post',
+    body: formData,
+  }).then(res => res.json());
 }
