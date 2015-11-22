@@ -81,8 +81,10 @@ export default function createContainer(DecoratedComponent, specs) {
         ...nextArgs,
       };
 
+      this.unsubscribe(); // fix double resolve
       adaptor.resolve(queries, args, this.isDataLoaded)
         .then(data => {
+          this.unsubscribe = adaptor.subscribe(this.resolve); // fix double resolve
           this.setState({
             data: {
               ...this.state.data,

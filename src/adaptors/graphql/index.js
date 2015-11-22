@@ -42,7 +42,7 @@ export default function createAdaptor(endpoint, schema) {
               payload: normalize(parsedSchema, res.data),
             })
 
-            return Promise.resolve();
+            return res.data;
           });
         });
     },
