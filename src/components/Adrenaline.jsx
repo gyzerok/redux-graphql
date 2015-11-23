@@ -8,8 +8,10 @@ const adaptorShape = createAdaptorShape(PropTypes);
 
 export default class Adrenaline extends Component {
   static childContextTypes = {
-    renderLoading: PropTypes.func.isRequired,
-    adaptor: adaptorShape.isRequired,
+    adrenaline: PropTypes.shape({
+      renderLoading: PropTypes.func.isRequired,
+      adaptor: adaptorShape.isRequired
+    }).isRequired
   }
 
   static propTypes = {
@@ -23,8 +25,10 @@ export default class Adrenaline extends Component {
 
   getChildContext() {
     return {
-      renderLoading: this.props.renderLoading,
-      adaptor: this.props.adaptor,
+      adrenaline: {
+        renderLoading: this.props.renderLoading,
+        adaptor: this.props.adaptor
+      }
     };
   }
 
