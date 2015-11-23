@@ -1,5 +1,6 @@
 import { createStore, combineReducers } from 'redux';
 import { graphql } from 'graphql';
+import { values } from 'lodash';
 
 import parseSchema from './utils/parseSchema';
 import normalize from './utils/normalize';
@@ -93,7 +94,7 @@ function createReducer(key) {
     switch (type) {
       case UPDATE_CACHE:
         if (state === null) {
-          return Object.values(payload[key]);
+          return values(payload[key]);
         }
         return state.reduce((acc, item) => {
           if (!payload[key][item.id]) {
