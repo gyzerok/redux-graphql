@@ -65,7 +65,7 @@ export default function createContainer(DecoratedComponent, specs) {
     componentDidMount() {
       const { adaptor } = this.context;
       this.isNotMounted= false;
-      this.unsubscribe = noop;
+      this.unsubscribe = adaptor.subscribe(this.resolve);
       this.resolve();
     }
 
@@ -86,14 +86,12 @@ export default function createContainer(DecoratedComponent, specs) {
         ...nextArgs,
       };
 
-      this.unsubscribe(); // fix double resolve
       adaptor.resolve(queries, args, this.isDataLoaded)
         .then(data => {
           if (this.isNotMounted) {
             return cb();
           }
 
-          this.unsubscribe = adaptor.subscribe(this.resolve); // fix double resolve
           this.setState({
             data: {
               ...this.state.data,

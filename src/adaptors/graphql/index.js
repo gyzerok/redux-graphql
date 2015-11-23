@@ -89,10 +89,18 @@ export default function createAdaptor(endpoint, schema) {
 }
 
 function createReducer(key) {
-  return (state = {}, { type, payload }) => {
+  return (state = null, { type, payload }) => {
     switch (type) {
       case UPDATE_CACHE:
-        return merge(state, payload[key] || {});
+        if (state === null) {
+          return Object.values(payload[key]);
+        }
+        return state.reduce((acc, item) => {
+          if (!payload[key][item.id]) {
+            return [...acc, item];
+          }
+          return [...acc, merge(item, payload[key][item.id])];
+        }, []);
       default:
         return state;
     }
