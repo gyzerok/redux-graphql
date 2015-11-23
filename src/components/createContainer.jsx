@@ -7,7 +7,9 @@ import getDisplayName from '../utils/getDisplayName';
 import createAdaptorShape from '../utils/createAdaptorShape';
 
 const adaptorShape = createAdaptorShape(PropTypes);
-function noop() {}
+function noop(err) {
+  if (err) console.error(err);
+}
 
 export default function createContainer(DecoratedComponent, specs) {
   const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
