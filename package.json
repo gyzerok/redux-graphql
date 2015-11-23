@@ -5,7 +5,7 @@
   "main": "./lib/index.js",
   "scripts": {
     "test": "node_modules/.bin/babel-tape-runner 'src/**/*.spec.js' | node_modules/.bin/tap-spec",
-    "postinstall": "node_modules/.bin/babel src --ignore __tests__ --out-dir lib/ --source-maps"
+    "postinstall": "node_modules/.bin/babel src --ignore __tests__ --out-dir lib/ --source-maps --stage=0"
   },
   "author": "Fedor Nezhivoi <gyzerok@gmail.com>",
   "license": "MIT",
