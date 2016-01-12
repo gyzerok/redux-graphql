@@ -8,6 +8,13 @@ import merge from './utils/merge';
 
 const UPDATE_CACHE = 'UPDATE_CACHE';
 
+function isDataLoadedFactory(specs){
+  const dataKeys = Object.keys(specs);
+  return (data = {}) => dataKeys.every(key => {
+    return data[key] !== null && typeof data[key] != 'undefined'
+  });
+}
+
 export default function createAdaptor(endpoint, schema) {
   const parsedSchema = parseSchema(schema);
   const reducers = Object.keys(parsedSchema).reduce((acc, key) => {
@@ -19,9 +26,11 @@ export default function createAdaptor(endpoint, schema) {
   const reducer = combineReducers(reducers);
   const store = createStore(reducer);
 
+
   return {
-    resolve(queries, args, isDataLoaded) {
+    resolve(queries, args) {
       const specs = queries(args);
+      const isDataLoaded = isDataLoadedFactory(specs)
       const query = Object.keys(specs).reduce((acc, key) => {
         return `${acc} ${specs[key]}`;
       }, '');
@@ -84,6 +93,7 @@ export default function createAdaptor(endpoint, schema) {
     },
 
     shouldComponentUpdate(prevState, nextState) {
+
       return prevState !== nextState;
     },
   };

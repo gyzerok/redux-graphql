@@ -5,8 +5,11 @@ import invariant from 'invariant';
 
 import getDisplayName from '../utils/getDisplayName';
 import createAdaptorShape from '../utils/createAdaptorShape';
+import createContainerShape from '../utils/createContainerShape';
 
 const adaptorShape = createAdaptorShape(PropTypes);
+const containerShape = createContainerShape(PropTypes);
+
 function noop(err) {
   if (err) console.error(err);
 }
@@ -34,41 +37,47 @@ export default function createContainer(DecoratedComponent, specs) {
     static DecoratedComponent = DecoratedComponent
 
     static contextTypes = {
-      renderLoading: PropTypes.func.isRequired,
-      adaptor: adaptorShape.isRequired,
+      adrenaline: PropTypes.shape({
+          renderLoading: PropTypes.func.isRequired,
+          adaptor: adaptorShape.isRequired
+      }).isRequired
+    }
+
+    static childContextTypes = {
+        adrenaline: containerShape.isRequired
     }
 
     constructor(props, context) {
       super(props, context);
-
       this.isNotMounted = true;
+      this.state = {};
+    }
 
-      const { adaptor } = context;
-      //DecoratedComponent.prototype.shouldComponentUpdate = adaptor.shouldComponentUpdate;
-
-      const initialArgs = !!specs.args ? specs.args(props) : {};
-
-      this.state = {
-        data: {},
-        args: initialArgs,
-      };
-
-      const dataKeys = Object.keys(specs.queries(initialArgs));
-      const { propTypes } = DecoratedComponent;
-      const requiredKeys = dataKeys.filter(key =>
-        propTypes[key] && !propTypes[key].isRequired
-      );
-
-      this.isDataLoaded = (data = {}) => requiredKeys.every(key => {
-        return data[key] !== null && data[key] !== undefined
-      });
+    getChildContext() {
+        const { adrenaline } = this.context;
+        const container = {
+            setArgs: this.setArgs,
+            state: this.state
+        };
+        return {
+            adrenaline: {
+                ...adrenaline,
+                container
+            }
+        };
     }
 
     componentDidMount() {
-      const { adaptor } = this.context;
+      const adaptor = this.getAdaptor();
       this.isNotMounted= false;
+      this.setArgs(this.computeArgs(this.props));
       this.unsubscribe = adaptor.subscribe(this.resolve);
-      this.resolve();
+    }
+
+    componentWillUpdate(nextProps){
+        if(this.props != nextProps){
+            this.setArgs(this.computeArgs(nextProps));
+        }
     }
 
     componentWillUnmount() {
@@ -76,29 +85,42 @@ export default function createContainer(DecoratedComponent, specs) {
       this.unsubscribe();
     }
 
+    shouldComponentUpdate(nextProps, nextState){
+      const adaptor = this.getAdaptor();
+      return this.props != nextProps ||
+        adaptor.shouldComponentUpdate(this.state, nextState);
+    }
+
+    getAdaptor = ()=> {
+        const { adrenaline } = this.context;
+        const { adaptor } = adrenaline;
+        return adaptor;
+    }
+
+    computeArgs(props) {
+        return !!specs.args ? specs.args(props) : {};
+    }
+
     setArgs = (nextArgs, cb) => {
       this.resolve(nextArgs, cb);
     }
 
-    resolve = (nextArgs = {}, cb = noop) => {
-      const { adaptor } = this.context;
+    resolve = (args = this.state.args, cb = noop) => {
+      if(typeof args == 'undefined'){
+          // An update was dispatched before the first args/data have been committed.
+          return cb();
+      }
+      const adaptor = this.getAdaptor();
       const { queries } = specs;
-      const args = {
-        ...this.state.args,
-        ...nextArgs,
-      };
 
-      adaptor.resolve(queries, args, this.isDataLoaded)
+      adaptor.resolve(queries, args)
         .then(data => {
           if (this.isNotMounted) {
             return cb();
           }
 
           this.setState({
-            data: {
-              ...this.state.data,
-              ...data,
-            },
+            data: data,
             args
           }, cb);
         })
@@ -106,20 +128,18 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     render() {
-      const { adaptor, renderLoading } = this.context;
+      const { adrenaline } = this.context;
+      const { adaptor, renderLoading } = adrenaline;
       const { data, args } = this.state;
 
-      if (!this.isDataLoaded(data)) {
-        return renderLoading();
+      if(typeof data == 'undefined'){
+          return renderLoading();
       }
 
       return (
         <DecoratedComponent
           {...this.props}
-          {...data}
-          adaptor={adaptor}
-          args={args}
-          setArgs={this.setArgs} />
+          {...data} />
       );
     }
   };
