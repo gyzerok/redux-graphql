@@ -44,7 +44,8 @@
   "dependencies": {
     "deepmerge": "^0.2.10",
     "invariant": "^2.1.0",
-    "lodash": "^3.10.1"
+    "lodash": "^3.10.1",
+    "warning": "^2.1.0"
   },
   "repository": {
     "type": "git",
