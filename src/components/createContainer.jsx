@@ -98,7 +98,7 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     computeArgs(props) {
-        return !!specs.args ? specs.args(props) : {};
+        return !!specs.args ? specs.args(props) : props;
     }
 
     setArgs = (nextArgs, cb) => {
