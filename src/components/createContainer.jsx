@@ -105,7 +105,7 @@ export default function createContainer(DecoratedComponent, specs) {
 
       adaptor.resolve(queries, args)
         .then(data => this.setState({ data }))
-        .catch(err => console.log(err));
+        .catch(err => console.err(err));
     }
 
     render() {
