@@ -37,10 +37,8 @@ class TodoApp extends Component {
 }
 
 export default createContainer(TodoApp, {
-  args: () => ({
-    count: 2,
-  }),
-  queries: ({ count }) => ({
+  args: () => ({}),
+  queries: () => ({
     viewer: `
       viewer {
         id,

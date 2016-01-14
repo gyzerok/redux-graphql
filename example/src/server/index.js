@@ -16,7 +16,7 @@ app.use('/graphql', graphqlHTTP({
   rootValue: conn,
 }));
 
-app.get('/rest/todo', (req, res)=>{
+app.get('/rest/todo', (req, res) => {
     res.json(conn.findTodo({count: req.query.count}));
 });
 

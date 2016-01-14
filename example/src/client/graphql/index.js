@@ -4,18 +4,20 @@ import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router';
-import { history } from 'react-router/lib/BrowserHistory';
+import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import routes from './routes';
-import { Adrenaline, createGraphQLAdaptor } from '../../../../src';
+import { Adrenaline } from '../../../../src';
+import createAdaptor from './adaptor';
 import schema from 'shared/schema';
 
-const adaptor = createGraphQLAdaptor('/graphql', schema);
+const history = createBrowserHistory();
+const adaptor = createAdaptor('/graphql');
 
 const rootNode = document.getElementById('root');
 ReactDOM.render(
   <Adrenaline adaptor={adaptor}>
-    <Router history={history} children={routes} />
+    <Router history={history} routes={routes} />
   </Adrenaline>,
   rootNode
 );
