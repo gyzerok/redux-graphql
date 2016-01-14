@@ -24,7 +24,7 @@ export default function createContainer(DecoratedComponent, specs) {
 
   invariant(
     typeof specs.queries === 'function',
-    `You have to define 'queries' as a function in${displayName}.`
+    `You have to define 'queries' as a function in ${displayName}.`
   );
 
   invariant(
@@ -32,52 +32,53 @@ export default function createContainer(DecoratedComponent, specs) {
     `You have to define 'args' as a function in ${displayName}.`
   );
 
+  function mapPropsToArgs(props) {
+    return !!specs.args ? specs.args(props) : props;
+  }
+
   return class extends Component {
     static displayName = displayName
     static DecoratedComponent = DecoratedComponent
 
     static contextTypes = {
       adrenaline: PropTypes.shape({
-          renderLoading: PropTypes.func.isRequired,
-          adaptor: adaptorShape.isRequired
+        renderLoading: PropTypes.func.isRequired,
+        adaptor: adaptorShape.isRequired
       }).isRequired
     }
 
     static childContextTypes = {
-        adrenaline: containerShape.isRequired
+      adrenaline: containerShape.isRequired
     }
 
     constructor(props, context) {
       super(props, context);
-      this.isNotMounted = true;
-      this.state = {};
+      this.state = { data: undefined };
     }
 
     getChildContext() {
-        const { adrenaline } = this.context;
-        const container = {
-            setArgs: this.setArgs,
-            state: this.state
-        };
-        return {
-            adrenaline: {
-                ...adrenaline,
-                container
-            }
-        };
+      const { adrenaline } = this.context;
+      const container = {
+        state: this.state
+      };
+      return {
+        adrenaline: {
+          ...adrenaline,
+          container
+        }
+      };
     }
 
     componentDidMount() {
       const adaptor = this.getAdaptor();
-      this.isNotMounted= false;
-      this.setArgs(this.computeArgs(this.props));
+      this.resolve();
       this.unsubscribe = adaptor.subscribe(this.resolve);
     }
 
     componentWillUpdate(nextProps){
-        if(this.props != nextProps){
-            this.setArgs(this.computeArgs(nextProps));
-        }
+      if(this.props != nextProps){
+        this.resolve();
+      }
     }
 
     componentWillUnmount() {
@@ -91,55 +92,38 @@ export default function createContainer(DecoratedComponent, specs) {
         adaptor.shouldComponentUpdate(this.state, nextState);
     }
 
-    getAdaptor = ()=> {
-        const { adrenaline } = this.context;
-        const { adaptor } = adrenaline;
-        return adaptor;
+    getAdaptor = () => {
+      const { adrenaline } = this.context;
+      const { adaptor } = adrenaline;
+      return adaptor;
     }
 
-    computeArgs(props) {
-        return !!specs.args ? specs.args(props) : props;
-    }
-
-    setArgs = (nextArgs, cb) => {
-      this.resolve(nextArgs, cb);
-    }
-
-    resolve = (args = this.state.args, cb = noop) => {
-      if(typeof args == 'undefined'){
-          // An update was dispatched before the first args/data have been committed.
-          return cb();
-      }
+    resolve = () => {
       const adaptor = this.getAdaptor();
       const { queries } = specs;
+      const args = mapPropsToArgs(this.props);
 
       adaptor.resolve(queries, args)
-        .then(data => {
-          if (this.isNotMounted) {
-            return cb();
-          }
-
-          this.setState({
-            data: data,
-            args
-          }, cb);
-        })
-        .catch(cb);
+        .then(data => this.setState({ data }))
+        .catch(err => console.log(err));
     }
 
     render() {
       const { adrenaline } = this.context;
       const { adaptor, renderLoading } = adrenaline;
-      const { data, args } = this.state;
 
-      if(typeof data == 'undefined'){
-          return renderLoading();
+      const { data } = this.state;
+      const args = mapPropsToArgs(this.props);
+
+      if (typeof data === 'undefined') {
+        return renderLoading();
       }
 
       return (
         <DecoratedComponent
           {...this.props}
-          {...data} />
+          {...data}
+          args={args} />
       );
     }
   };

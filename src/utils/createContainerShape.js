@@ -5,11 +5,10 @@ export default function createContainerShape(PropTypes) {
   return PropTypes.shape({
     adaptor: adaptorShape.isRequired,
     container: PropTypes.shape({
-        state: PropTypes.shape({
-            args: PropTypes.object,
-            data: PropTypes.object
-        }).isRequired,
-        setArgs: PropTypes.func.isRequired
+      state: PropTypes.shape({
+        args: PropTypes.object,
+        data: PropTypes.object,
+      }).isRequired,
     }).isRequired
   });
 }
