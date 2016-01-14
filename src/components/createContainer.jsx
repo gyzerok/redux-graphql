@@ -82,7 +82,6 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     componentWillUnmount() {
-      this.isNotMounted = true;
       this.unsubscribe();
     }
 
