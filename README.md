@@ -65,8 +65,8 @@ reducer and actions.
 import { createAction, handleAction } from 'redux-actions';
 export const UPDATE_CACHE = "UPDATE_CACHE";
 const updateCache = createAction(UPDATE_CACHE);
-export const reducer = handleAction(UPDATE_CACHE, (state, {resource})=>
-  Object.assign({}, state, { [resource.id]: resource }));
+export const reducer = handleAction(UPDATE_CACHE, (state, action)=>
+  Object.assign({}, state, { [action.payload.id]: action.payload }));
 
 export const resourceAdapter = {
   resolve: (state, dispatch, queries) => {
@@ -79,7 +79,7 @@ export const resourceAdapter = {
           return fetch(`/api/resource/${query.id}`)
             .then((response)=>{
               const resource = response.json();
-              updateCache(resource);
+              dispatch(updateCache(resource));
               dataProps[prop] = resource;
             })
         }
