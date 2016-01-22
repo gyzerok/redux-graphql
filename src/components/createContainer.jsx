@@ -103,13 +103,15 @@ export default function createContainer(DecoratedComponent, specs) {
       const args = mapPropsToArgs(this.props);
 
       adaptor.resolve(queries, args)
-        .then(data => this.setState({ data }))
-        .catch(err => console.err(err));
+        .catch(err => {
+          console.err(err);
+        })
+        .then(data => this.setState({ data }));
     }
 
     render() {
       const { adrenaline } = this.context;
-      const { adaptor, renderLoading } = adrenaline;
+      const { renderLoading } = adrenaline;
 
       const { data } = this.state;
       const args = mapPropsToArgs(this.props);
