@@ -47,6 +47,10 @@ export default function createContainer(DecoratedComponent, specs) {
       adrenaline: containerShape.isRequired
     }
 
+    static getQueries() {
+      return specs.queries;
+    }
+
     constructor(props, context) {
       super(props, context);
       this.state = { data: undefined };
