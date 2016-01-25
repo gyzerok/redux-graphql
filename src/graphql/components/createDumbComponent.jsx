@@ -2,7 +2,7 @@
 
 import React, { Component } from 'react';
 import invariant from 'invariant';
-import getDisplayName from '../../../utils/getDisplayName';
+import getDisplayName from '../../utils/getDisplayName';
 import { isString, isObject } from 'lodash';
 
 export default function createDumbComponent(DecoratedComponent, specs) {
