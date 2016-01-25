@@ -27,9 +27,6 @@ const todoType = new GraphQLObjectType({
     owner: {
       type: userType,
       resolve: (todo, _, { rootValue: root }) => {
-        if (__CLIENT__) {
-          return root.User[todo.owner.id];
-        }
         return root.findUser();
       },
     },
@@ -58,10 +55,6 @@ const userType = new GraphQLObjectType({
         },
       },
       resolve: (user, params, { rootValue: root }) => {
-        if (__CLIENT__) {
-          const todos = user.todos.map(id => root.Todo[id]);
-          return params.count ? todos.slice(0, params.count) : todos;
-        }
         return root.findTodo(params);
       },
     },
@@ -94,9 +87,6 @@ export default new GraphQLSchema({
       viewer: {
         type: userType,
         resolve: (root) => {
-          if (__CLIENT__) {
-            return root.User['u-1'];
-          }
           return root.findUser();
         },
       },
