@@ -61,7 +61,7 @@ caching strategy for your API. Your adapter must be an object with the following
 Note: this trivial example just demonstrates how an adapter and reducer _could_
 fetch and cache resources from an arbitrary API and how the adapter relates to
 reducer and actions.
-```
+```js
 import { createAction, handleAction } from 'redux-actions';
 export const UPDATE_CACHE = "UPDATE_CACHE";
 const updateCache = createAction(UPDATE_CACHE);
@@ -103,7 +103,7 @@ will resolve from and restricted set of actions that containers subscribe to for
 Building upon the resource adapter example, we place the adrenaline's cache at a sub-domain
 in the state tree and optimize containers by ensuring they only subscribe to and re-resolve
 data props after 'UPDATE_CACHE' actions.
-```
+```js
 import { createStore, combineReducers} from 'redux';
 import { Provider } from 'react-redux';
 import { AdrenalineReduxProvider } from 'adrenaline';
@@ -140,7 +140,7 @@ Options can be one of the following:
 A container's state is accessible through context and can be handled manually to
 build custom behavior. The container exposes 'current', 'pending', and 'failed'
 args and data for this purpose.
-```
+```js
 import { containerShape } from 'adrenaline';
 const ResourceContainer = createContainer({
   args: (props) => ({ id: props.id }),
@@ -167,7 +167,7 @@ target props as the query requirements change or the cache is updated.
 In the following example, `ResourceComponent` will actually be exported as a
 container component that fetches and updates the data prop 'myResource' using
 Adrenaline.
-```
+```js
 @createContainerComponent({
   args: (props) => ({ id: props.id })
   queries: (args) => ({
