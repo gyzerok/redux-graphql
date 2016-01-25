@@ -10,10 +10,6 @@ import createContainerShape from '../utils/createContainerShape';
 const adaptorShape = createAdaptorShape(PropTypes);
 const containerShape = createContainerShape(PropTypes);
 
-function noop(err) {
-  if (err) console.error(err);
-}
-
 export default function createContainer(DecoratedComponent, specs) {
   const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
 
@@ -75,8 +71,8 @@ export default function createContainer(DecoratedComponent, specs) {
       this.unsubscribe = adaptor.subscribe(this.resolve);
     }
 
-    componentWillUpdate(nextProps){
-      if(this.props != nextProps){
+    componentWillUpdate(nextProps) {
+      if (this.props != nextProps) {
         this.resolve();
       }
     }
@@ -85,7 +81,7 @@ export default function createContainer(DecoratedComponent, specs) {
       this.unsubscribe();
     }
 
-    shouldComponentUpdate(nextProps, nextState){
+    shouldComponentUpdate(nextProps, nextState) {
       const adaptor = this.getAdaptor();
       return this.props != nextProps ||
         adaptor.shouldComponentUpdate(this.state, nextState);
