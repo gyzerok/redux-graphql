@@ -4,7 +4,7 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "test": "mocha --compilers js:babel/register --recursive",
+    "test": "mocha --compilers js:babel/register $(find ./src -name '*.spec.js')",
     "start": "node index.js"
   },
   "author": "Fedor Nezhivoi <gyzerok@gmail.com>",

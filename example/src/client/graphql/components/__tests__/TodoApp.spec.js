@@ -3,8 +3,8 @@ import { parse } from 'graphql/language';
 import { validate } from 'graphql/validation';
 import adrenalineTestUtils from 'adrenaline/lib/adaptors/graphql/test-utils/expect';
 
-import schema from '../src/shared/schema';
-import TodoApp from '../src/client/graphql/components/TodoApp';
+import schema from '../../../../shared/schema';
+import TodoApp from '../TodoApp';
 
 expect.extend(adrenalineTestUtils);
 
