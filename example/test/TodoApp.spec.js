@@ -5,8 +5,8 @@ import { validate } from 'graphql/validation';
 import schema from '../src/shared/schema';
 import TodoApp from '../src/client/graphql/components/TodoApp';
 
-describe('TodoApp', () => {
-  it('queries regression', (done) => {
+describe('Queries regression', () => {
+  it('for TodoApp', (done) => {
     const queries = TodoApp.getQueries()();
     const combinedQueries = Object
       .keys(queries)
