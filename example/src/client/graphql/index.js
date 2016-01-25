@@ -7,7 +7,7 @@ import { Router } from 'react-router';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import routes from './routes';
-import { Adrenaline } from '../../../../src';
+import { Adrenaline } from 'adrenaline';
 import createAdaptor from './adaptor';
 import schema from 'shared/schema';
 

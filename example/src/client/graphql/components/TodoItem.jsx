@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component, PropTypes } from 'react';
-import { createDumbComponent } from '../../../../../src';
+import { createDumbComponent } from 'adrenaline';
 
 class TodoItem extends Component {
   static propTypes = {

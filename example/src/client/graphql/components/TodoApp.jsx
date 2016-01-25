@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component, PropTypes } from 'react';
-import { createContainer } from '../../../../../src';
+import { createContainer } from 'adrenaline';
 import createContainerShape from '../../../../../src/utils/createContainerShape';
 
 import TodoInput from './TodoInput';
