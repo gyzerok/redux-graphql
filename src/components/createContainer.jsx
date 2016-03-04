@@ -4,11 +4,6 @@ import React, { Component, PropTypes } from 'react';
 import invariant from 'invariant';
 
 import getDisplayName from '../utils/getDisplayName';
-import createAdaptorShape from '../utils/createAdaptorShape';
-import createContainerShape from '../utils/createContainerShape';
-
-const adaptorShape = createAdaptorShape(PropTypes);
-const containerShape = createContainerShape(PropTypes);
 
 export default function createContainer(DecoratedComponent, specs) {
   const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
@@ -37,36 +32,16 @@ export default function createContainer(DecoratedComponent, specs) {
     static DecoratedComponent = DecoratedComponent
 
     static contextTypes = {
-      adrenaline: PropTypes.shape({
-        renderLoading: PropTypes.func.isRequired,
-        adaptor: adaptorShape.isRequired
-      }).isRequired
+      renderLoading: PropTypes.func,
     }
 
-    static childContextTypes = {
-      adrenaline: containerShape.isRequired
-    }
-
-    static getQueries() {
-      return specs.queries;
+    static getSpecs() {
+      return specs;
     }
 
     constructor(props, context) {
       super(props, context);
       this.state = { data: undefined };
-    }
-
-    getChildContext() {
-      const { adrenaline } = this.context;
-      const container = {
-        state: this.state
-      };
-      return {
-        adrenaline: {
-          ...adrenaline,
-          container
-        }
-      };
     }
 
     componentDidMount() {
@@ -76,7 +51,7 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     componentWillUpdate(nextProps) {
-      if (this.props != nextProps) {
+      if (this.props !== nextProps) {
         this.resolve();
       }
     }
@@ -87,7 +62,7 @@ export default function createContainer(DecoratedComponent, specs) {
 
     shouldComponentUpdate(nextProps, nextState) {
       const adaptor = this.getAdaptor();
-      return this.props != nextProps ||
+      return this.props !== nextProps ||
         adaptor.shouldComponentUpdate(this.state, nextState);
     }
 

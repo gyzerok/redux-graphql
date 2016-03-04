@@ -3,7 +3,8 @@ import { validate } from 'graphql/validation';
 
 export default {
   toBeValidAgainst(schema) {
-    const queries = this.actual.getQueries()();
+    const specs = this.actual.getSpecs();
+    const queries = specs.queries();
     const combinedQueries = Object
       .keys(queries)
       .reduce((acc, key) => {

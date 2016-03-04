@@ -1,17 +1,10 @@
 /* @flow */
 
-import React, { Component, PropTypes, Children } from 'react';
-
-import createAdaptorShape from '../utils/createAdaptorShape';
-
-const adaptorShape = createAdaptorShape(PropTypes);
+import React, { Component, PropTypes } from 'react';
 
 export default class Adrenaline extends Component {
   static childContextTypes = {
-    adrenaline: PropTypes.shape({
-      renderLoading: PropTypes.func.isRequired,
-      adaptor: adaptorShape.isRequired
-    }).isRequired
+    renderLoading: PropTypes.func.isRequired,
   }
 
   static propTypes = {
@@ -25,10 +18,7 @@ export default class Adrenaline extends Component {
 
   getChildContext() {
     return {
-      adrenaline: {
-        renderLoading: this.props.renderLoading,
-        adaptor: this.props.adaptor
-      }
+      renderLoading: this.props.renderLoading,
     };
   }
 

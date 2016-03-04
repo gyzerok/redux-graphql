@@ -16,14 +16,7 @@ app.use('/graphql', graphqlHTTP({
   rootValue: conn,
 }));
 
-app.get('/rest/todo', (req, res) => {
-    res.json(conn.findTodo({count: req.query.count}));
-});
-
-app.get('/', (req, res) => {
-    res.redirect('/example/graphql');
-})
-app.get('/example/:name', (req, res) => {
+app.get('*', (req, res) => {
   res.send(`
     <!DOCTYPE html>
     <html>
@@ -33,7 +26,7 @@ app.get('/example/:name', (req, res) => {
       </head>
       <body>
         <div id="root"></div>
-        <script type="text/javascript" src="/public/${req.params.name}.bundle.js"></script>
+        <script type="text/javascript" src="/public/bundle.js"></script>
       </body>
     </html>
   `);
