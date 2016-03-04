@@ -2,10 +2,10 @@
 
 import React, { Component } from 'react';
 import invariant from 'invariant';
-import getDisplayName from '../../utils/getDisplayName';
-import { isString, isObject } from 'lodash';
+import getDisplayName from '../utils/getDisplayName';
+import isPlainObject from '../utils/isPlainObject';
 
-export default function createDumbComponent(DecoratedComponent, specs) {
+export default function createDumbContainer(DecoratedComponent, specs) {
   const displayName = `DumbComponent(${getDisplayName(DecoratedComponent)})`;
 
   invariant(
@@ -17,7 +17,7 @@ export default function createDumbComponent(DecoratedComponent, specs) {
   const { fragments } = specs;
 
   invariant(
-    isObject(fragments),
+    isPlainObject(fragments),
     'Fragments have to be declared as object in %s',
     displayName
   );
@@ -28,7 +28,7 @@ export default function createDumbComponent(DecoratedComponent, specs) {
 
     static getFragment(key) {
       invariant(
-        isString(key),
+        typeof key === 'string',
         'You cant call getFragment(key: string) without string key in %s',
         displayName
       );

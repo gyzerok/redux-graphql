@@ -85,8 +85,7 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     render() {
-      const { adrenaline } = this.context;
-      const { renderLoading } = adrenaline;
+      const { renderLoading } = this.context;
 
       const { data } = this.state;
       const args = mapPropsToArgs(this.props);
