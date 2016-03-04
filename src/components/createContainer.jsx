@@ -34,6 +34,7 @@ export default function createContainer(DecoratedComponent, specs) {
     static contextTypes = {
       renderLoading: PropTypes.func,
       query: PropTypes.func,
+      mutate: PropTypes.func,
     }
 
     static getSpecs() {
@@ -73,7 +74,7 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     render() {
-      const { renderLoading } = this.context;
+      const { renderLoading, mutate } = this.context;
 
       const { data } = this.state;
       const args = mapPropsToArgs(this.props);
@@ -86,6 +87,7 @@ export default function createContainer(DecoratedComponent, specs) {
         <DecoratedComponent
           {...this.props}
           {...data}
+          mutate={mutate}
           args={args} />
       );
     }

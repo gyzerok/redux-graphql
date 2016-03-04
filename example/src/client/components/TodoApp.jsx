@@ -13,11 +13,7 @@ class TodoApp extends Component {
   }
 
   createTodo = (args) => {
-    /*
-    const { adrenaline } = this.context;
-    const { adaptor } = adrenaline;
-    adaptor.mutate(createTodo, { input: args });
-    */
+    this.props.mutate(createTodo, { input: args });
   }
 
   render() {

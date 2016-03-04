@@ -1,6 +1,6 @@
 import parseJSON from './parseJSON';
 
-function performMutation(endpoint, mutation, variables, files) {
+export default function performMutation(endpoint, mutation, variables, files) {
   if (!files) {
     return fetch(endpoint, {
       method: 'post',
