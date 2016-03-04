@@ -1,6 +1,4 @@
 import expect from 'expect';
-import { parse } from 'graphql/language';
-import { validate } from 'graphql/validation';
 import adrenalineTestUtils from 'adrenaline/lib/graphql/test-utils/expect';
 
 import schema from '../../../../shared/schema';
