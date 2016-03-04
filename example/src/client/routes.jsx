@@ -7,6 +7,6 @@ import TodoApp from './components/TodoApp';
 
 export default (
   <Route component={App}>
-    <Route path="/example/graphql" component={TodoApp} />
+    <Route path="/" component={TodoApp} />
   </Route>
 );

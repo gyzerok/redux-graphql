@@ -12,6 +12,9 @@ module.exports = {
   },
   resolve: {
     extensions: ['', '.js', '.jsx'],
+    alias: {
+      adrenaline: path.join(__dirname, '..', 'src')
+    },
     root: [
       path.join(__dirname, 'node_modules'),
       path.join(__dirname, 'src')

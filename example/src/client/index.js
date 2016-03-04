@@ -8,15 +8,12 @@ import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import routes from './routes';
 import { Adrenaline } from 'adrenaline';
-import createAdaptor from './adaptor';
-import schema from 'shared/schema';
 
 const history = createBrowserHistory();
-const adaptor = createAdaptor('/graphql');
 
 const rootNode = document.getElementById('root');
 ReactDOM.render(
-  <Adrenaline adaptor={adaptor}>
+  <Adrenaline>
     <Router history={history} routes={routes} />
   </Adrenaline>,
   rootNode
