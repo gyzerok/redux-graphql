@@ -21,8 +21,7 @@
   ],
   "peerDependencies": {
     "react": "^0.14.0",
-    "graphql": "^0.4.0",
-    "redux": "^3.0.2"
+    "graphql": "^0.4.0"
   },
   "devDependencies": {
     "babel": "^5.8.23",
@@ -32,18 +31,12 @@
     "babel-runtime": "^5.8.25",
     "babel-tape-runner": "^1.2.0",
     "eslint": "^1.9.0",
-    "react-addons-test-utils": "^0.14.1",
-    "sinon": "^1.17.1",
-    "sinon-as-promised": "^4.0.0",
-    "skin-deep": "^0.12.0",
     "tap-spec": "^4.0.2",
     "tape": "^4.2.1",
     "webpack": "^1.12.2"
   },
   "dependencies": {
-    "deepmerge": "^0.2.10",
-    "invariant": "^2.1.0",
-    "lodash": "^3.10.1"
+    "invariant": "^2.1.0"
   },
   "repository": {
     "type": "git",
