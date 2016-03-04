@@ -4,6 +4,7 @@ import React, { Component, PropTypes } from 'react';
 import invariant from 'invariant';
 
 import getDisplayName from '../utils/getDisplayName';
+import shallowEqual from '../utils/shallowEqual';
 
 export default function createContainer(DecoratedComponent, specs) {
   const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
@@ -41,18 +42,13 @@ export default function createContainer(DecoratedComponent, specs) {
       return specs;
     }
 
-    constructor(props, context) {
-      super(props, context);
-      this.state = { data: undefined };
-    }
-
-    componentDidMount() {
-      this.resolve();
+    componentWillMount() {
+      this.query();
     }
 
     componentWillUpdate(nextProps) {
-      if (this.props !== nextProps) {
-        this.resolve();
+      if (!shallowEqual(this.props, nextProps)) {
+        this.query();
       }
     }
 
@@ -60,7 +56,7 @@ export default function createContainer(DecoratedComponent, specs) {
       //this.unsubscribe();
     }
 
-    resolve = () => {
+    query = () => {
       const { queries } = specs;
       const args = mapPropsToArgs(this.props);
 
@@ -73,8 +69,13 @@ export default function createContainer(DecoratedComponent, specs) {
       });
     }
 
+    mutate = (...args) => {
+      return this.context.mutate(...args)
+        .then(() => this.query());
+    }
+
     render() {
-      const { renderLoading, mutate } = this.context;
+      const { renderLoading } = this.context;
 
       const { data } = this.state;
       const args = mapPropsToArgs(this.props);
@@ -87,7 +88,7 @@ export default function createContainer(DecoratedComponent, specs) {
         <DecoratedComponent
           {...this.props}
           {...data}
-          mutate={mutate}
+          mutate={this.mutate}
           args={args} />
       );
     }
