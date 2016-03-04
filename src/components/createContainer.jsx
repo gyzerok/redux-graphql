@@ -33,6 +33,7 @@ export default function createContainer(DecoratedComponent, specs) {
 
     static contextTypes = {
       renderLoading: PropTypes.func,
+      query: PropTypes.func,
     }
 
     static getSpecs() {
@@ -45,9 +46,7 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     componentDidMount() {
-      const adaptor = this.getAdaptor();
       this.resolve();
-      this.unsubscribe = adaptor.subscribe(this.resolve);
     }
 
     componentWillUpdate(nextProps) {
@@ -57,31 +56,20 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     componentWillUnmount() {
-      this.unsubscribe();
-    }
-
-    shouldComponentUpdate(nextProps, nextState) {
-      const adaptor = this.getAdaptor();
-      return this.props !== nextProps ||
-        adaptor.shouldComponentUpdate(this.state, nextState);
-    }
-
-    getAdaptor = () => {
-      const { adrenaline } = this.context;
-      const { adaptor } = adrenaline;
-      return adaptor;
+      //this.unsubscribe();
     }
 
     resolve = () => {
-      const adaptor = this.getAdaptor();
       const { queries } = specs;
       const args = mapPropsToArgs(this.props);
 
-      adaptor.resolve(queries, args)
-        .catch(err => {
-          console.err(err);
-        })
-        .then(data => this.setState({ data }));
+      this.setState({ data: undefined }, () => {
+        this.context.query(queries, args)
+          .catch(err => {
+            console.err(err);
+          })
+          .then(data => this.setState({ data }));
+      });
     }
 
     render() {
