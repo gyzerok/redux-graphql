@@ -4,7 +4,7 @@
   "description": "React bindings for Redux with Relay in mind",
   "main": "./lib/index.js",
   "scripts": {
-    "test": "node_modules/.bin/babel-tape-runner 'src/**/*.spec.js' | node_modules/.bin/tap-spec",
+    "test": "mocha --compilers js:babel/register $(find ./src -name '*.spec.js')",
     "postinstall": "node_modules/.bin/babel src --ignore __tests__ --out-dir lib/ --source-maps --stage=0"
   },
   "author": "Fedor Nezhivoi <gyzerok@gmail.com>",
@@ -29,10 +29,9 @@
     "babel-eslint": "^4.1.6",
     "babel-loader": "^5.3.2",
     "babel-runtime": "^5.8.25",
-    "babel-tape-runner": "^1.2.0",
     "eslint": "^1.9.0",
-    "tap-spec": "^4.0.2",
-    "tape": "^4.2.1",
+    "expect": "^1.14.0",
+    "mocha": "^2.4.5",
     "webpack": "^1.12.2"
   },
   "dependencies": {

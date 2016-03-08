@@ -1,12 +1,15 @@
-import test from 'tape';
+import expect from 'expect';
+
 import getDisplayName from '../getDisplayName';
 
-test('getDisplayName should return String or Component for empty object', assert => {
-  const mapped = [
-    { displayName: 'hey' },
-    { name: 'ho' },
-    {}
-  ].map(getDisplayName);
-  assert.deepEqual(mapped, ['hey', 'ho', 'Component']);
-  assert.end();
+describe('getDisplayName', () => {
+  it('should return String or Component for empty object', () => {
+    const actual = [
+      { displayName: 'hey' },
+      { name: 'ho' },
+      {},
+    ].map(getDisplayName);
+    const expected = ['hey', 'ho', 'Component'];
+    expect(actual).toEqual(expected);
+  });
 });
