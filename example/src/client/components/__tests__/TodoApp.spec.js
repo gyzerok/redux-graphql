@@ -1,10 +1,10 @@
 import expect from 'expect';
-import adrenalineTestUtils from 'adrenaline/lib/test-utils/expect';
+import { TestUtils } from 'adrenaline';
 
 import schema from '../../../server/schema';
 import TodoApp from '../TodoApp';
 
-expect.extend(adrenalineTestUtils);
+expect.extend(TestUtils.expect);
 
 describe('Queries regression', () => {
   it('for TodoApp', () => {
