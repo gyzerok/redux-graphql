@@ -3,8 +3,10 @@
 import { join } from 'path';
 import express from 'express';
 import graphqlHTTP from 'express-graphql';
-import schema from '../shared/schema';
+
+import schema from './schema';
 import * as conn from './data';
+
 
 const app = express();
 
