@@ -2,8 +2,10 @@
 
 import React, { Component } from 'react';
 import invariant from 'invariant';
+
 import getDisplayName from '../utils/getDisplayName';
 import isPlainObject from '../utils/isPlainObject';
+
 
 export default function createDumbContainer(DecoratedComponent, specs) {
   const displayName = `DumbComponent(${getDisplayName(DecoratedComponent)})`;

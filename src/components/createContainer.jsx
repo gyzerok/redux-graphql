@@ -6,6 +6,7 @@ import invariant from 'invariant';
 import getDisplayName from '../utils/getDisplayName';
 import shallowEqual from '../utils/shallowEqual';
 
+
 export default function createContainer(DecoratedComponent, specs) {
   const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
 
@@ -42,6 +43,14 @@ export default function createContainer(DecoratedComponent, specs) {
       return specs;
     }
 
+    constructor(props, context) {
+      super(props, context);
+
+      this.state = {
+        data: null,
+      };
+    }
+
     componentWillMount() {
       this.query();
     }
@@ -60,7 +69,7 @@ export default function createContainer(DecoratedComponent, specs) {
       const { queries } = specs;
       const args = mapPropsToArgs(this.props);
 
-      this.setState({ data: undefined }, () => {
+      this.setState({ data: null }, () => {
         this.context.query(queries, args)
           .catch(err => {
             console.err(err);
@@ -75,19 +84,17 @@ export default function createContainer(DecoratedComponent, specs) {
     }
 
     render() {
-      const { renderLoading } = this.context;
-
       const { data } = this.state;
+      const isFetching = data === null;
       const args = mapPropsToArgs(this.props);
 
-      if (typeof data === 'undefined') {
-        return renderLoading();
-      }
+      const dataOrDefault = isLoading ? {} : data;
 
       return (
         <DecoratedComponent
           {...this.props}
-          {...data}
+          {...dataOrDefault}
+          isFetching={isFetching}
           mutate={this.mutate}
           args={args} />
       );
