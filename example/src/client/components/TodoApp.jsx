@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component, PropTypes } from 'react';
-import { createContainer } from 'adrenaline';
+import { container } from 'adrenaline';
 
 import TodoInput from './TodoInput';
 import TodoList from './TodoList';
@@ -36,7 +36,7 @@ class TodoApp extends Component {
   }
 }
 
-export default createContainer({
+export default container({
   queries: () => ({
     viewer: `
       viewer {

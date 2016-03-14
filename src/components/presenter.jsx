@@ -7,9 +7,9 @@ import getDisplayName from '../utils/getDisplayName';
 import isPlainObject from '../utils/isPlainObject';
 
 
-export default function createDumbContainer(specs) {
+export default function presenter(specs) {
   return DecoratedComponent => {
-    const displayName = `AdrenalineDumbContainer(${getDisplayName(DecoratedComponent)})`;
+    const displayName = `AdrenalinePresenter(${getDisplayName(DecoratedComponent)})`;
 
     invariant(
       specs.hasOwnProperty('fragments'),

@@ -7,7 +7,7 @@ import getDisplayName from '../utils/getDisplayName';
 import shallowEqual from '../utils/shallowEqual';
 
 
-export default function createContainer(specs) {
+export default function container(specs) {
   return DecoratedComponent => {
     const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
 

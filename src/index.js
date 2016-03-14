@@ -1,5 +1,5 @@
 /* @flow */
 
 export Adrenaline from './components/Adrenaline';
-export createContainer from './components/createContainer';
-export createDumbContainer from './components/createDumbContainer';
+export container from './components/container';
+export presenter from './components/presenter';

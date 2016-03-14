@@ -1,7 +1,7 @@
 /* @flow */
 
 import React, { Component, PropTypes } from 'react';
-import { createDumbContainer } from 'adrenaline';
+import { presenter } from 'adrenaline';
 
 class TodoItem extends Component {
   static propTypes = {
@@ -17,7 +17,7 @@ class TodoItem extends Component {
   }
 }
 
-export default createDumbContainer({
+export default presenter({
   fragments: {
     todo: `
       fragment on Todo {
