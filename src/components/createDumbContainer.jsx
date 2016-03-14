@@ -8,7 +8,7 @@ import isPlainObject from '../utils/isPlainObject';
 
 
 export default function createDumbContainer(DecoratedComponent, specs) {
-  const displayName = `DumbComponent(${getDisplayName(DecoratedComponent)})`;
+  const displayName = `AdrenalineDumbContainer(${getDisplayName(DecoratedComponent)})`;
 
   invariant(
     specs.hasOwnProperty('fragments'),

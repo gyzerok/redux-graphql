@@ -5,19 +5,27 @@ import { createContainer } from 'adrenaline';
 
 import TodoInput from './TodoInput';
 import TodoList from './TodoList';
+import Loader from './Loader';
 import { createTodo } from '../mutations/todo';
 
 class TodoApp extends Component {
   static propTypes = {
-    viewer: PropTypes.object.isRequired,
+    viewer: PropTypes.object,
   }
 
   createTodo = (args) => {
-    this.props.mutate(createTodo, { input: args });
+    this.props.mutate({
+      mutation: createTodo,
+      variables: { input: args },
+    });
   }
 
   render() {
-    const { viewer } = this.props;
+    const { viewer, isFetching } = this.props;
+
+    if (isFetching) {
+      return <Loader />;
+    }
 
     return (
       <div>
@@ -29,7 +37,6 @@ class TodoApp extends Component {
 }
 
 export default createContainer(TodoApp, {
-  args: () => ({}),
   queries: () => ({
     viewer: `
       viewer {

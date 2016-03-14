@@ -21,12 +21,12 @@ export default function createContainer(DecoratedComponent, specs) {
   );
 
   invariant(
-    !specs.args || typeof specs.args === 'function',
-    `You have to define 'args' as a function in ${displayName}.`
+    !specs.variables || typeof specs.variables === 'function',
+    `You have to define 'variables' as a function in ${displayName}.`
   );
 
-  function mapPropsToArgs(props) {
-    return !!specs.args ? specs.args(props) : props;
+  function mapPropsToVariables(props) {
+    return !!specs.variables ? specs.variables(props) : {};
   }
 
   return class extends Component {
@@ -34,7 +34,6 @@ export default function createContainer(DecoratedComponent, specs) {
     static DecoratedComponent = DecoratedComponent
 
     static contextTypes = {
-      renderLoading: PropTypes.func,
       query: PropTypes.func,
       mutate: PropTypes.func,
     }
@@ -67,10 +66,10 @@ export default function createContainer(DecoratedComponent, specs) {
 
     query = () => {
       const { queries } = specs;
-      const args = mapPropsToArgs(this.props);
+      const variables = mapPropsToVariables(this.props);
 
       this.setState({ data: null }, () => {
-        this.context.query(queries, args)
+        this.context.query(queries, variables)
           .catch(err => {
             console.err(err);
           })
@@ -78,17 +77,21 @@ export default function createContainer(DecoratedComponent, specs) {
       });
     }
 
-    mutate = (...args) => {
-      return this.context.mutate(...args)
-        .then(() => this.query());
+    mutate = ({ mutation = '', variables = {}, files = null, invalidate = true }) => {
+      return this.context.mutate(mutation, variables, files)
+        .then(() => {
+          if (invalidate) {
+            this.query();
+          }
+        });
     }
 
     render() {
       const { data } = this.state;
       const isFetching = data === null;
-      const args = mapPropsToArgs(this.props);
+      const variables = mapPropsToVariables(this.props);
 
-      const dataOrDefault = isLoading ? {} : data;
+      const dataOrDefault = isFetching ? {} : data;
 
       return (
         <DecoratedComponent
@@ -96,7 +99,7 @@ export default function createContainer(DecoratedComponent, specs) {
           {...dataOrDefault}
           isFetching={isFetching}
           mutate={this.mutate}
-          args={args} />
+          variables={variables} />
       );
     }
   };

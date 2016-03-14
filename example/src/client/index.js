@@ -4,10 +4,10 @@ import 'whatwg-fetch';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import { Router } from 'react-router';
+import { Adrenaline } from 'adrenaline';
 import createBrowserHistory from 'history/lib/createBrowserHistory';
 
 import routes from './routes';
-import { Adrenaline } from 'adrenaline';
 
 const history = createBrowserHistory();
 
