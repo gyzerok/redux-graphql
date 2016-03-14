@@ -25,18 +25,12 @@ export default class Adrenaline extends Component {
     const { endpoint } = this.props;
 
     return {
-      query: (queries, args) => {
-        const specs = queries();
-        const query = Object.keys(specs).reduce((acc, key) => {
-          return `${acc} ${specs[key]}`;
-        }, '');
-        const graphQLQuery = `
-          query AdrenalineQuery {
-            ${query}
-          }
-        `.replace(/\s+/g, ' ').trim();
-
-        return performQuery(endpoint, graphQLQuery, args);
+      query: (queries, variables) => {
+        return performQuery(
+          endpoint,
+          createGraphQLQuery(queries),
+          variables
+        );
       },
       mutate: (...args) => performMutation(endpoint, ...args),
     };
@@ -46,4 +40,19 @@ export default class Adrenaline extends Component {
     const { children } = this.props;
     return children;
   }
+}
+
+function createGraphQLQuery(queries) {
+  const specs = queries();
+  const query = Object
+    .keys(specs)
+    .reduce((acc, key) => {
+      return `${acc} ${specs[key]}`;
+    }, '');
+
+  return `
+    query AdrenalineQuery {
+      ${query}
+    }
+  `.replace(/\s+/g, ' ').trim();
 }
