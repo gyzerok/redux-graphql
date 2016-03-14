@@ -36,7 +36,7 @@ class TodoApp extends Component {
   }
 }
 
-export default createContainer(TodoApp, {
+export default createContainer({
   queries: () => ({
     viewer: `
       viewer {
@@ -45,4 +45,4 @@ export default createContainer(TodoApp, {
       }
     `,
   }),
-});
+})(TodoApp);

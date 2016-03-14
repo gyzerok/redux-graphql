@@ -27,7 +27,7 @@ class TodoList extends Component {
   }
 }
 
-export default createDumbContainer(TodoList, {
+export default createDumbContainer({
   fragments: {
     todos: `
       fragment on User {
@@ -38,4 +38,4 @@ export default createDumbContainer(TodoList, {
       }
     `,
   },
-});
+})(TodoList);

@@ -17,7 +17,7 @@ class TodoItem extends Component {
   }
 }
 
-export default createDumbContainer(TodoItem, {
+export default createDumbContainer({
   fragments: {
     todo: `
       fragment on Todo {
@@ -25,4 +25,4 @@ export default createDumbContainer(TodoItem, {
       }
     `,
   },
-});
+})(TodoItem);

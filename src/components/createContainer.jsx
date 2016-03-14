@@ -7,100 +7,102 @@ import getDisplayName from '../utils/getDisplayName';
 import shallowEqual from '../utils/shallowEqual';
 
 
-export default function createContainer(DecoratedComponent, specs) {
-  const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
+export default function createContainer(specs) {
+  return DecoratedComponent => {
+    const displayName = `AdrenalineContainer(${getDisplayName(DecoratedComponent)})`;
 
-  invariant(
-    specs !== null && specs !== undefined,
-    `${displayName} requires configuration.`
-  );
+    invariant(
+      specs !== null && specs !== undefined,
+      `${displayName} requires configuration.`
+    );
 
-  invariant(
-    typeof specs.queries === 'function',
-    `You have to define 'queries' as a function in ${displayName}.`
-  );
+    invariant(
+      typeof specs.queries === 'function',
+      `You have to define 'queries' as a function in ${displayName}.`
+    );
 
-  invariant(
-    !specs.variables || typeof specs.variables === 'function',
-    `You have to define 'variables' as a function in ${displayName}.`
-  );
+    invariant(
+      !specs.variables || typeof specs.variables === 'function',
+      `You have to define 'variables' as a function in ${displayName}.`
+    );
 
-  function mapPropsToVariables(props) {
-    return !!specs.variables ? specs.variables(props) : {};
-  }
-
-  return class extends Component {
-    static displayName = displayName
-    static DecoratedComponent = DecoratedComponent
-
-    static contextTypes = {
-      query: PropTypes.func,
-      mutate: PropTypes.func,
+    function mapPropsToVariables(props) {
+      return !!specs.variables ? specs.variables(props) : {};
     }
 
-    static getSpecs() {
-      return specs;
-    }
+    return class extends Component {
+      static displayName = displayName
+      static DecoratedComponent = DecoratedComponent
 
-    constructor(props, context) {
-      super(props, context);
+      static contextTypes = {
+        query: PropTypes.func,
+        mutate: PropTypes.func,
+      }
 
-      this.state = {
-        data: null,
-      };
-    }
+      static getSpecs() {
+        return specs;
+      }
 
-    componentWillMount() {
-      this.query();
-    }
+      constructor(props, context) {
+        super(props, context);
 
-    componentWillUpdate(nextProps) {
-      if (!shallowEqual(this.props, nextProps)) {
+        this.state = {
+          data: null,
+        };
+      }
+
+      componentWillMount() {
         this.query();
       }
-    }
 
-    componentWillUnmount() {
-      //this.unsubscribe();
-    }
+      componentWillUpdate(nextProps) {
+        if (!shallowEqual(this.props, nextProps)) {
+          this.query();
+        }
+      }
 
-    query = () => {
-      const { queries } = specs;
-      const variables = mapPropsToVariables(this.props);
+      componentWillUnmount() {
+        //this.unsubscribe();
+      }
 
-      this.setState({ data: null }, () => {
-        this.context.query(queries, variables)
-          .catch(err => {
-            console.err(err);
-          })
-          .then(data => this.setState({ data }));
-      });
-    }
+      query = () => {
+        const { queries } = specs;
+        const variables = mapPropsToVariables(this.props);
 
-    mutate = ({ mutation = '', variables = {}, files = null, invalidate = true }) => {
-      return this.context.mutate(mutation, variables, files)
-        .then(() => {
-          if (invalidate) {
-            this.query();
-          }
+        this.setState({ data: null }, () => {
+          this.context.query(queries, variables)
+            .catch(err => {
+              console.err(err);
+            })
+            .then(data => this.setState({ data }));
         });
-    }
+      }
 
-    render() {
-      const { data } = this.state;
-      const isFetching = data === null;
-      const variables = mapPropsToVariables(this.props);
+      mutate = ({ mutation = '', variables = {}, files = null, invalidate = true }) => {
+        return this.context.mutate(mutation, variables, files)
+          .then(() => {
+            if (invalidate) {
+              this.query();
+            }
+          });
+      }
 
-      const dataOrDefault = isFetching ? {} : data;
+      render() {
+        const { data } = this.state;
+        const isFetching = data === null;
+        const variables = mapPropsToVariables(this.props);
 
-      return (
-        <DecoratedComponent
-          {...this.props}
-          {...dataOrDefault}
-          isFetching={isFetching}
-          mutate={this.mutate}
-          variables={variables} />
-      );
-    }
+        const dataOrDefault = isFetching ? {} : data;
+
+        return (
+          <DecoratedComponent
+            {...this.props}
+            {...dataOrDefault}
+            isFetching={isFetching}
+            mutate={this.mutate}
+            variables={variables} />
+        );
+      }
+    };
   };
 }
