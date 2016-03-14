@@ -1,7 +1,7 @@
 import expect from 'expect';
-import adrenalineTestUtils from 'adrenaline/lib/graphql/test-utils/expect';
+import adrenalineTestUtils from 'adrenaline/lib/test-utils/expect';
 
-import schema from '../../../../shared/schema';
+import schema from '../../../server/schema';
 import TodoApp from '../TodoApp';
 
 expect.extend(adrenalineTestUtils);
