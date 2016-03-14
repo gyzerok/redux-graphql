@@ -2,7 +2,7 @@ import expect from 'expect';
 
 import shallowEqual from '../shallowEqual';
 
-describe('Utils', () => {
+describe('utils', () => {
   describe('shallowEqual', () => {
     it('should return true if arguments fields are equal', () => {
       expect(
