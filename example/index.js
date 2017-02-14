@@ -18,7 +18,7 @@ var devServer = new WebpackDevServer(webpack(config), {
   historyApiFallback: true,
   proxy: [
     {
-      path: /^(?!\/public).*$/,
+      path: '/',
       target: proxy
     }
   ]
